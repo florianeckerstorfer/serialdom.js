@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SerialDOM.js</title>
+    <script src="build/serialdom.js"></script>
+</head>
+<body>
+
+    <aside>
+        <button id="serialize-btn">Serialize</button>
+    </aside>
+
+    <section id="output"><pre><code></code></pre></section>
+
+    <section id="content">
+        <div class="super-awesome mega" data-foo="bar">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat sapiente, sit. Molestiae cum laborum voluptatem minima aliquam architecto, itaque obcaecati excepturi consequuntur nobis nulla error a natus praesentium nam dignissimos.</p>
+            <p>Lorem ipsum dolor sit amet, <em>consectetur</em> adipisicing elit. Odit qui voluptatem nulla, ipsum iure vero sint, illum facilis, <em>excepturi quaerat <strong>accusantium</strong> cumque</em>! Eaque natus ut tenetur debitis, temporibus tempore distinctio.</p>
+        </div>
+    </section>
+
+<script>
+    var serialDOM = new SerialDOM({customElements: ['foo']});
+    document.querySelector('.mega').foo = 'FOO FUCKING BAR';
+    document.querySelector('#serialize-btn').addEventListener('click', function (e) {
+        var json = serialDOM.serialize(document.querySelector('#content'));
+        console.log(JSON.parse(json));
+        document.querySelector('#output pre code').innerHTML = json;
+    }, false);
+</script>
+</body>
+</html>
