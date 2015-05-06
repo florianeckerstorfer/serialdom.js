@@ -11,12 +11,20 @@
         <button id="serialize-btn">Serialize</button>
     </aside>
 
-    <section id="output"><pre><code></code></pre></section>
+    <section id="output">
+        <pre><code></code></pre>
+    </section>
 
     <section id="content">
         <div class="super-awesome mega" data-foo="bar">
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat sapiente, sit. Molestiae cum laborum voluptatem minima aliquam architecto, itaque obcaecati excepturi consequuntur nobis nulla error a natus praesentium nam dignissimos.</p>
             <p>Lorem ipsum dolor sit amet, <em>consectetur</em> adipisicing elit. Odit qui voluptatem nulla, ipsum iure vero sint, illum facilis, <em>excepturi quaerat <strong>accusantium</strong> cumque</em>! Eaque natus ut tenetur debitis, temporibus tempore distinctio.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
         </div>
     </section>
 
@@ -26,7 +34,7 @@
     document.querySelector('#serialize-btn').addEventListener('click', function (e) {
         var json = serialDOM.serialize(document.querySelector('#content'));
         console.log(JSON.parse(json));
-        document.querySelector('#output pre code').innerHTML = json;
+        document.querySelector('#output code').innerHTML = json;
     }, false);
 </script>
 </body>

@@ -6,7 +6,11 @@ var SerialDOM = function (options) {
 };
 
 SerialDOM.defaultOptions = {
-    customElements: []
+    customProperties: [],
+    defaultProperties: [
+        'className', 'clientHeight', 'clientLeft', 'clientTop', 'clientWidth', 'scrollHeight', 'scrollLeft',
+        'scrollTop', 'scrollWidth', 'tagName'
+    ]
 };
 
 SerialDOM.prototype.serialize = function(node) {
@@ -15,23 +19,23 @@ SerialDOM.prototype.serialize = function(node) {
 
 SerialDOM.prototype.simplifyElement = function(element) {
     var simpleElement = {
-        attributes: this.simplifyAttributes(element),
-        children:   this.simplifyChildren(element),
-        className:    element.className || null,
-        clientHeight: element.clientHeight || null,
-        clientLeft:   element.clientLeft || null,
-        clientTop:    element.clientTop || null,
-        clientWidth:  element.clientWidth || null,
-        scrollHeight: element.scrollHeight || null,
-        scrollLeft:   element.scrollLeft || null,
-        scrollTop:    element.scrollTop || null,
-        scrollWidth:  element.scrollWidth || null,
-        textContent:  element.textContent || null,
-        tagName:      element.tagName || null
+            nodeType: element.nodeType
     };
-    for (var i = 0; i < this.options.customElements.length; i++) {
-        console.log(this.options.customElements[i]);
-        simpleElement[this.options.customElements[i]] = element[this.options.customElements[i]] || null;
+    if (simpleElement.nodeType === Node.TEXT_NODE) {
+        simpleElement.textContent = element.textContent;
+    } else if (simpleElement.nodeType === Node.ELEMENT_NODE) {
+        simpleElement.attributes = this.simplifyAttributes(element);
+        simpleElement.children   = this.simplifyChildren(element);
+        for (var i = 0; i < this.options.defaultProperties.length; i++) {
+            if (element[this.options.defaultProperties[i]]) {
+                simpleElement[this.options.defaultProperties[i]] = element[this.options.defaultProperties[i]];
+            }
+        }
+        for (var i = 0; i < this.options.customProperties.length; i++) {
+            if (element[this.options.customProperties[i]]) {
+               simpleElement[this.options.customProperties[i]] = element[this.options.customProperties[i]];
+            }
+        }
     }
 
     return simpleElement;
@@ -39,8 +43,10 @@ SerialDOM.prototype.simplifyElement = function(element) {
 
 SerialDOM.prototype.simplifyAttributes = function(element) {
     var simpleAttributes = [];
-    for (var i = 0; i < element.attributes.length; i++) {
-        simpleAttributes.push({name: element.attributes[i].name, value: element.attributes[i].value});
+    if (element.attributes) {
+        for (var i = 0; i < element.attributes.length; i++) {
+            simpleAttributes.push({name: element.attributes[i].name, value: element.attributes[i].value});
+        }
     }
 
     return simpleAttributes;
@@ -48,8 +54,10 @@ SerialDOM.prototype.simplifyAttributes = function(element) {
 
 SerialDOM.prototype.simplifyChildren = function(element) {
     var simpleChildren = [];
-    for (var i = 0; i < element.children.length; i++) {
-        simpleChildren.push(this.simplifyElement(element.children[i]));
+    if (element.hasChildNodes()) {
+        for (var i = 0; i < element.childNodes.length; i++) {
+            simpleChildren.push(this.simplifyElement(element.childNodes[i]));
+        }
     }
 
     return simpleChildren;
