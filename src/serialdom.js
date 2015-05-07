@@ -42,10 +42,10 @@ SerialDOM.prototype.simplifyElement = function(element) {
 };
 
 SerialDOM.prototype.simplifyAttributes = function(element) {
-    var simpleAttributes = [];
+    var simpleAttributes = {};
     if (element.attributes) {
         for (var i = 0; i < element.attributes.length; i++) {
-            simpleAttributes.push({name: element.attributes[i].name, value: element.attributes[i].value});
+            simpleAttributes[element.attributes[i].name] = element.attributes[i].value;
         }
     }
 
